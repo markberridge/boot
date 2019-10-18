@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'org.springframework.boot' version '2.1.9.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'com.github.ben-manes.versions' version '0.26.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+project.sourceCompatibility = 11
+project.targetCompatibility = 11
+
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'net.javacrumbs.json-unit:json-unit-assertj:2.9.0'
+    testImplementation 'io.rest-assured:rest-assured:3.0.3'
+}
