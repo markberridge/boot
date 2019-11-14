@@ -1,24 +1,32 @@
-package uk.co.markberridge.boot;
+package uk.co.markberridge.boot.health;
 
 import io.restassured.RestAssured;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import uk.co.markberridge.boot.test.LocalDbCreationRule;
 
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
+
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
 @DirtiesContext
-public class PingControllerTest {
+@ActiveProfiles("localDynamo")
+public class HealthCheckTest {
+
+    @ClassRule
+    public static LocalDbCreationRule dynamoDB = new LocalDbCreationRule();
 
     @LocalServerPort
     int port;
@@ -26,19 +34,19 @@ public class PingControllerTest {
     @Before
     public void before() {
         RestAssured.port = port;
-        RestAssured.basePath = "/";
+        RestAssured.basePath = "/actuator";
     }
 
     @Test
-    public void pingEndpoint() throws IOException {
+    public void testUp() throws IOException {
 
         String response = given()
                 .when()
-                .get("ping")
+                .get("health")
                 .then()
                 .statusCode(200)
                 .extract().response().asString();
 
-        assertThat(response).isEqualTo("pong");
+        assertThatJson(response).node("status").isEqualTo("UP");
     }
 }

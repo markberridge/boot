@@ -1,4 +1,4 @@
-package uk.co.markberridge.boot;
+package uk.co.markberridge.boot.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
