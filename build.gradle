@@ -17,6 +17,9 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://s3-us-west-2.amazonaws.com/dynamodb-local/release'
+    }
 }
 
 project.sourceCompatibility = 11
@@ -26,8 +29,14 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'com.github.derjust:spring-data-dynamodb:4.3.1'
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
+
+    implementation platform('software.amazon.awssdk:bom:2.10.15')
+    implementation 'software.amazon.awssdk:dynamodb'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'net.javacrumbs.json-unit:json-unit-assertj:2.9.0'
     testImplementation 'io.rest-assured:rest-assured:3.0.3'
+    testImplementation 'com.amazonaws:DynamoDBLocal:[1.11,2.0)'
 }

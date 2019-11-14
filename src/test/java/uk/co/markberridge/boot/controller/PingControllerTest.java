@@ -1,4 +1,4 @@
-package uk.co.markberridge.boot;
+package uk.co.markberridge.boot.controller;
 
 import io.restassured.RestAssured;
 import org.junit.Before;
@@ -12,13 +12,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
-import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
 @DirtiesContext
-public class HealthCheckTest {
+public class PingControllerTest {
 
     @LocalServerPort
     int port;
@@ -26,19 +26,19 @@ public class HealthCheckTest {
     @Before
     public void before() {
         RestAssured.port = port;
-        RestAssured.basePath = "/actuator";
+        RestAssured.basePath = "/";
     }
 
     @Test
-    public void testUp() throws IOException {
+    public void pingEndpoint() throws IOException {
 
         String response = given()
                 .when()
-                .get("health")
+                .get("ping")
                 .then()
                 .statusCode(200)
                 .extract().response().asString();
 
-        assertThatJson(response).node("status").isEqualTo("UP");
+        assertThat(response).isEqualTo("pong");
     }
 }
